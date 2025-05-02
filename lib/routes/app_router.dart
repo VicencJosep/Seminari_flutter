@@ -1,3 +1,4 @@
+
 import 'package:go_router/go_router.dart';
 import 'package:seminari_flutter/screens/auth/login_screen.dart';
 import 'package:seminari_flutter/screens/borrar_screen.dart';
@@ -7,6 +8,8 @@ import 'package:seminari_flutter/screens/imprimir_screen.dart';
 import 'package:seminari_flutter/screens/home_screen.dart';
 import 'package:seminari_flutter/screens/perfil_screen.dart';
 import 'package:seminari_flutter/services/auth_service.dart';
+import 'package:seminari_flutter/screens/contrasenya_screen.dart';
+
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AuthService().isLoggedIn ? '/' : '/login',
@@ -38,6 +41,10 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (context, state) => const PerfilScreen(),
+        ),
+        GoRoute(
+          path: 'canviarcontrasenya',
+          builder: (context, state) => const ContrasenyaScreen(),
         ),
       ],
     ),

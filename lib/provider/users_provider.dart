@@ -7,6 +7,16 @@ class UserProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _error;
 
+
+  User currentUser = User(
+    id: null,
+    name: '',
+    age: 0,
+    email: '',
+    password: '',
+  );
+
+
   List<User> get users => _users;
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -18,6 +28,12 @@ class UserProvider with ChangeNotifier {
 
   void _setError(String? errorMessage) {
     _error = errorMessage;
+    notifyListeners();
+  }
+
+  void setCurrentUser(User user) {
+    currentUser = user;
+    print('Usuario actualizado: ${currentUser.toJson()}');
     notifyListeners();
   }
 
@@ -53,6 +69,48 @@ class UserProvider with ChangeNotifier {
       return false;
     }
   }
+  Future<bool> modificarUsuari(
+  String? id,
+  String nom,
+  int edat,
+  String email,
+) async {
+  if (id == null || id.isEmpty) {
+    _setError('Error: El ID del usuario es nulo o vacío');
+    return false;
+  }
+
+  _setLoading(true);
+  _setError(null);
+
+  final password = currentUser.password ?? '';
+
+  final nouUsuari = User(
+    id: id,
+    name: nom,
+    age: edat,
+    email: email,
+    password: password,
+  );
+
+  try {
+    final createdUser = await UserService.modificaUser(nouUsuari);
+    if (createdUser != null) {
+      setCurrentUser(createdUser);
+      _setLoading(false);
+      notifyListeners();
+      return true;
+    } else {
+      _setError('Error: El servicio devolvió un usuario nulo');
+      _setLoading(false);
+      return false;
+    }
+  } catch (e) {
+    _setError('Error modificando el usuario: $e');
+    _setLoading(false);
+    return false;
+  }
+}
 
   Future<bool> eliminarUsuariPerId (String id) async {
     _setLoading(true);
@@ -103,4 +161,35 @@ class UserProvider with ChangeNotifier {
       return false;
     }
   }
+  Future<bool> canviarContrasenya(String password) async {
+  _setLoading(true);
+  _setError(null);
+
+  final newUser = User(
+    id: currentUser.id,
+    name: currentUser.name,
+    age: currentUser.age,
+    email: currentUser.email,
+    password: password,
+  );
+
+  try {
+    final user = await UserService.modificaUser(newUser);
+
+    if (user != null) {
+      currentUser = user;
+      notifyListeners();
+      return true;
+    } else {
+      _setError('Error canviant contrasenya: Usuari no trobat');
+      return false;
+    }
+  } catch (e) {
+    _setError('Error canviant contrasenya: $e');
+    _setLoading(false);
+    return false;
+  } finally {
+    _setLoading(false);
+  }
+}
 }

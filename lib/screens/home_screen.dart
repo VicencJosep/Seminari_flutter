@@ -1,14 +1,16 @@
+
 import 'package:flutter/material.dart';
 //import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:seminari_flutter/provider/users_provider.dart';
 import 'package:seminari_flutter/widgets/Layout.dart';
+import 'package:seminari_flutter/models/user.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState(  );
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -22,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
+  final userProvider = Provider.of<UserProvider>(context, listen: true);
+  final currentUser = userProvider.currentUser;
 
     return LayoutWrapper(
       title: 'Home',
@@ -45,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Benvinguts a la App Demo de Flutter',
+                            'Benvingut, ${currentUser.name}',
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).colorScheme.primary,

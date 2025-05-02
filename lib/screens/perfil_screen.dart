@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../widgets/Layout.dart';
+import 'package:provider/provider.dart';
+import '../provider/users_provider.dart';
 import '../services/auth_service.dart';
+import '../widgets/Layout.dart';
 
 class PerfilScreen extends StatelessWidget {
   const PerfilScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: true);
+    final currentUser = userProvider.currentUser;
+    print('Current user: ${currentUser.name}, ${currentUser.email}');
+
     return LayoutWrapper(
       title: 'Perfil',
       child: SingleChildScrollView(
@@ -20,27 +26,60 @@ class PerfilScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const CircleAvatar(
-                    radius: 70,
+                    radius: 60,
                     backgroundColor: Colors.deepPurple,
-                    child: Icon(Icons.person, size: 70, color: Colors.white),
+                    child: Icon(Icons.person, size: 60, color: Colors.white),
                   ),
                   const SizedBox(height: 24),
-                  Text(
-                    'Exemple',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+
+                  // --- Card con Nombre y Correo ---
+                  Card(
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 20.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Nom',
+                            style: TextStyle(color: Colors.grey.shade600),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            currentUser.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Correu electrònic',
+                            style: TextStyle(color: Colors.grey.shade600),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            currentUser.email,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(color: Colors.grey.shade800),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'demo@exemple.com',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleMedium?.copyWith(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24),
+
+                  // --- Card con ID y Edad ---
                   Card(
-                    elevation: 4,
+                    elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -52,17 +91,24 @@ class PerfilScreen extends StatelessWidget {
                             context,
                             Icons.badge,
                             'ID',
-                            '67f8f3103368468b6e9d509c',
+                            currentUser.id ?? 'No ID',
                           ),
                           const Divider(),
-                          _buildProfileItem(context, Icons.cake, 'Edat', '22'),
+                          _buildProfileItem(
+                            context,
+                            Icons.cake,
+                            'Edat',
+                            currentUser.age.toString(),
+                          ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
+
+                  // --- Configuración ---
                   Card(
-                    elevation: 4,
+                    elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -81,39 +127,48 @@ class PerfilScreen extends StatelessWidget {
                             Icons.edit,
                             'Editar Perfil',
                             'Actualitza la teva informació personal',
+                            onTap: () => context.go('/editar'),
                           ),
                           _buildSettingItem(
                             context,
                             Icons.lock,
                             'Canviar contrasenya',
                             'Actualitzar la contrasenya',
+                            onTap: () => context.go('/canviarcontrasenya'),
                           ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 32),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      try {
-                        final authService = AuthService();
-                        authService.logout();
-                        context.go('/login');
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error al tancar sessió: $e')),
-                        );
-                      }
-                    },
-                    icon: const Icon(Icons.logout),
-                    label: const Text('TANCAR SESSIÓ'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
+
+                  // --- Botón cerrar sesión ---
+                  SizedBox(
+                    width: 200,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          final authService = AuthService();
+                          authService.logout();
+                          context.go('/login');
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error al tancar sessió: $e')),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
+                      child: const Text(
+                        'TANCAR SESSIÓ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -143,16 +198,14 @@ class PerfilScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
+                Text(label, style: const TextStyle(color: Colors.grey)),
+                const SizedBox(height: 2),
                 Text(
                   value,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: valueColor,
+                    color: valueColor ?? Colors.black87,
                   ),
                 ),
               ],
@@ -167,14 +220,15 @@ class PerfilScreen extends StatelessWidget {
     BuildContext context,
     IconData icon,
     String title,
-    String subtitle,
-  ) {
+    String subtitle, {
+    VoidCallback? onTap,
+  }) {
     return ListTile(
       leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
       title: Text(title),
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }
