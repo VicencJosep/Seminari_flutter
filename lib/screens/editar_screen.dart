@@ -197,6 +197,7 @@ class _EditarScreenState extends State<EditarScreen> {
         filled: true,
         fillColor: Colors.grey.shade100,
       ),
+      style: const TextStyle(color: Colors.blue), // Cambia el color del texto aquí
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,

@@ -48,7 +48,10 @@ class PerfilScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Nom',
-                            style: TextStyle(color: Colors.grey.shade600),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -61,15 +64,18 @@ class PerfilScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           Text(
                             'Correu electrònic',
-                            style: TextStyle(color: Colors.grey.shade600),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             currentUser.email,
                             style: Theme.of(context)
                                 .textTheme
-                                .titleMedium
-                                ?.copyWith(color: Colors.grey.shade800),
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -119,7 +125,10 @@ class PerfilScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Configuració del compte',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 16),
                           _buildSettingItem(
@@ -134,7 +143,10 @@ class PerfilScreen extends StatelessWidget {
                             Icons.lock,
                             'Canviar contrasenya',
                             'Actualitzar la contrasenya',
-                            onTap: () => context.go('/canviarcontrasenya'),
+                            onTap: () {
+                              print('Navegando a /canviarcontrasenya');
+                              context.go('/canviarcontrasenya');
+                            },
                           ),
                         ],
                       ),
@@ -198,15 +210,20 @@ class PerfilScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(color: Colors.grey)),
+                Text(
+                  label,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 2),
                 Text(
                   value,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: valueColor ?? Colors.black87,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -225,8 +242,20 @@ class PerfilScreen extends StatelessWidget {
   }) {
     return ListTile(
       leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
-      title: Text(title),
-      subtitle: Text(subtitle),
+      title: Text(
+        title,
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge
+            ?.copyWith(fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge
+            ?.copyWith(fontWeight: FontWeight.bold),
+      ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
     );

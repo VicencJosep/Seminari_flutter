@@ -32,6 +32,7 @@ class LoginPage extends StatelessWidget {
       _showError(context, result['error']);
     } else {
       userProvider.setCurrentUser(User.fromJson(result));
+      print('Usuari logat: ${userProvider.currentUser.toJson()} Result: $result');
       await Future.delayed(Duration.zero);
       context.go('/');
     }

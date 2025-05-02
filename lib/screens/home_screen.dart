@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
   final userProvider = Provider.of<UserProvider>(context, listen: true);
   final currentUser = userProvider.currentUser;
+  print ('Current user en home: ${currentUser.name}, ${currentUser.email}');
 
     return LayoutWrapper(
       title: 'Home',

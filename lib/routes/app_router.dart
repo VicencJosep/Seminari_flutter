@@ -45,7 +45,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: 'canviarcontrasenya',
           builder: (context, state) => const ContrasenyaScreen(),
-        ),
+      ),
       ],
     ),
   ],

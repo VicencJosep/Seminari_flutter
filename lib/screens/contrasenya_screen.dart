@@ -7,8 +7,7 @@ class ContrasenyaScreen extends StatefulWidget {
   const ContrasenyaScreen({super.key});
 
   @override
-  State<ContrasenyaScreen> createState() =>
-      _ContrasenyaScreenState();
+  State<ContrasenyaScreen> createState() => _ContrasenyaScreenState();
 }
 
 class _ContrasenyaScreenState extends State<ContrasenyaScreen> {
@@ -29,6 +28,16 @@ class _ContrasenyaScreenState extends State<ContrasenyaScreen> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.currentUser;
+
+    // Verifica si el usuario actual está correctamente inicializado
+    if (user.id == null || user.id!.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Canviar Contrasenya')),
+        body: const Center(
+          child: Text('Error: No s\'ha trobat cap usuari vàlid.'),
+        ),
+      );
+    }
 
     return LayoutWrapper(
       title: 'Canviar Contrasenya',
@@ -164,7 +173,12 @@ class _ContrasenyaScreenState extends State<ContrasenyaScreen> {
         prefixIcon: const Icon(Icons.lock),
         filled: true,
         fillColor: Colors.grey.shade100,
+        floatingLabelStyle: const TextStyle(
+          color: Colors.blue, // Cambia el color del label flotante aquí
+          fontWeight: FontWeight.bold,
+        ),
       ),
+      style: const TextStyle(color: Colors.blue), // Cambia el color del texto aquí
       validator: (value) =>
           value == null || value.isEmpty ? 'Aquest camp és obligatori' : null,
     );
