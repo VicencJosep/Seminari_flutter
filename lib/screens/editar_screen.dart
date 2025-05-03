@@ -147,6 +147,9 @@ class _EditarScreenState extends State<EditarScreen> {
                                           ),
                                         ),
                                       );
+
+                                      // Redirige al usuario al login
+                                      context.go('/login');
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(

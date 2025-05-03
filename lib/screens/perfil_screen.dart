@@ -135,14 +135,14 @@ class PerfilScreen extends StatelessWidget {
                             context,
                             Icons.edit,
                             'Editar Perfil',
-                            'Actualitza la teva informació personal',
+                            'Canvia la teva informació',
                             onTap: () => context.go('/editar'),
                           ),
                           _buildSettingItem(
                             context,
                             Icons.lock,
                             'Canviar contrasenya',
-                            'Actualitzar la contrasenya',
+                            'Canvia la contrasenya',
                             onTap: () {
                               print('Navegando a /canviarcontrasenya');
                               context.go('/canviarcontrasenya');

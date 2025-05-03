@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seminari_flutter/provider/users_provider.dart';
 import 'package:seminari_flutter/widgets/Layout.dart';
+import 'package:go_router/go_router.dart';
 
 class ContrasenyaScreen extends StatefulWidget {
   const ContrasenyaScreen({super.key});
@@ -128,6 +129,7 @@ class _ContrasenyaScreenState extends State<ContrasenyaScreen> {
                                   currentPassController.clear();
                                   newPassController.clear();
                                   confirmPassController.clear();
+                                  context.go('/login');
                                 } else {
                                   _showError(result.toString());
                                 }
